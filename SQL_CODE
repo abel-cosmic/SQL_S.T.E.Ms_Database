@@ -116,17 +116,7 @@ CREATE TABLE Course_taken(--COURSE TAKEN COLUMN/ATTRIBUTE
 	Mark	INT  NULL,
 	Grade_Letter VARCHAR(4) NOT NULL,
 );
---TO DO---------------------------------------------------------------------------------------------------------------------------------
---THE CLACULATION ON YEARS  NOTICING THAT YEARS IS DEPENDENT ON NO OF YEARS IN DEPARTMENT 
-/*SELECT Course_taken .Years AS X FROM Course_taken 
-SELECT Department.No_Of_Year AS Y FROM Department
-UPDATE  Course_taken SET Course_taken.Years =( (Department.No_Of_Year)-(Course_taken .Years) )
-SELECT Department.No_Of_Year , Course_taken .Years
-FROM  Course_taken
-INNER JOIN  Department ON Department.No_Of_Year  = Course_taken .Years;
--- REFER THE INNER JOIN,SELF JOIN,LEFT JOIN RIGHT JOIN QUERIES
---FOR GRADE_LETTER NOTICE IT IS CALCULATED FROM MARK */
---TO DO---------------------------------------------------------------------------------------------------------------------------------
+
 INSERT INTO Course_taken(SID_,DID ,TID,Years ,Semester,Mark,Grade_Letter)--TO INSERT TUPLES INTO THE TABLE
 VALUES('RIT/400/21','232','CS02',2013,	1,32,NULL),
 			 ('RCS/322/21','922','HH101',2014,2,56,NULL),
@@ -139,27 +129,43 @@ VALUES('RIT/400/21','232','CS02',2013,	1,32,NULL),
 			 ('RCS/227/20','691','M51',2014,1,	87,NULL),
 			 ('RCS/322/21','691','M51',2015,1,56,NULL);
 SELECT*FROM Course_taken;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
+ALTER TABLE COURSE_TAKEN 
+			ADD  GRADE_LETTER VARCHAR(4) NULL
+			UPDATE COURSE_TAKEN SET Grade_Letter = 
+			(CASE
+				 WHEN MARK >= 90 THEN 'A+'
+				 WHEN MARK >= 83 THEN 'A'
+				 WHEN MARK >= 80 THEN 'A-'
+				 WHEN MARK >= 75 THEN 'B+'
+				 WHEN MARK >= 70 THEN 'B'
+				 WHEN MARK >= 65 THEN 'B-'
+				 WHEN MARK >= 60 THEN 'C+'
+				 WHEN MARK >= 55 THEN 'C'
+				 WHEN MARK >= 50 THEN 'C-'
+				 WHEN MARK >= 40 THEN 'D'
+				 ELSE 'F'
+				 END
+				 );
 
 CREATE TABLE Message_s(--MESSAGE_S COLUMN / ATTRIBUTE 
-	Sender VARCHAR(15)  NOT NULL,
-	Reciever VARCHAR(15) NOT NULL,
+	TID VARCHAR(5)  NOT NULL FOREIGN KEY REFERENCES TEACHER(TID),
+	SID_ VARCHAR(15)  NOT NULL FOREIGN KEY REFERENCES STUDENT(SID_),
+	SENDERTYPE VARCHAR(1) NULL,
 	Datas NVARCHAR(100) NULL,
 	TimeStamps TIMESTAMP NOT NULL
 );
---TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- MAKE SENDER AND RECIEVER HAVE THE CONSTRAINT FOERIGN KEY BUT ASSIGN IT THE NAME SENDER AND RECIEVER BUT BOT SHOULD CONTAIN TID OR SID
---TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO Message_s(Sender ,Reciever,Datas, TimeStamps)--TO INSERT TUPLES INTO THE TABLE
 VALUES( '232','RCS/322/21','.txt','2:30'),
-			 ('691','RARC/454/21','.jpg','4:30'),
-			 ('922','RMT/326/20','.csv','3:00'),
-			 ('589','RCS/227/20','.mp4','5:50'),
-			 ('346','RIT/400/21','.mp3','2:00'),
-			 ('RCS/322/21','232','.txt','2:30'),
-             ('RARC/454/21','691','.jpg','4:30'),
-			 ('RMT/326/20','922','.csv','3:00'),
-			 ('RCS/227/20','589','.mp4','5:50'),
-			 ('RIT/400/21','346','.mp3','2:00');
+			 ('691','RARC/454/21','.jpg',DEFAULT),
+			 ('922','RMT/326/20','.csv',DEFAULT),
+			 ('589','RCS/227/20','.mp4',DEFAULT),
+			 ('346','RIT/400/21','.mp3',DEFAULT),
+			 ('RCS/322/21','232','.txt',DEFAULT),
+             ('RARC/454/21','691','.jpg',DEFAULT),
+			 ('RMT/326/20','922','.csv',DEFAULT),
+			 ('RCS/227/20','589','.mp4',DEFAULT),
+			 ('RIT/400/21','346','.mp3',DEFAULT);
+			 -- CHANGED THE TIMESTAMP TO DEFAULTS BECAUSE IT EITHER HAS TO BE BLANK OR LET THE DATABASE DECIDE WHEN IT IS INSERTED INTO IT
 SELECT*FROM Message_s;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Transfer_Student(--TRANSFER STUDENT COLUMN / ATTRIBUTES
@@ -212,7 +218,7 @@ CREATE TABLE Transcript(--TRANSCRIPT COLUMN / ATTRIBUTES
 --TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --BEFORE INSERTING MAKE THE GPA BE CALCULATE FROM GRADES IN COURSE TAKEN TABLE
 --AND THEN CGPA IS CALUCLATED BY TAKING SUM OF EACH GPA OF EACH GRADE IN COURSE TAKEN TABLE
--- AND THEN MULTIPLYING IT WITH CREDIT HOUR FROM COURSE TABLE
+-- AND THEN MULTIPLYING IT WITH CREDIT HOUR FROM COURSE TABLE DIVIDED BY  DEPARTMENT IN  YEARS
 --TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO Transcript(SID_,GPA,CGPA)--TO INSERT TUPLES INTO THE TABLE
 VALUES('RCS/322/21',2.6,2.9),
@@ -221,3 +227,4 @@ VALUES('RCS/322/21',2.6,2.9),
 			 ('RCS/227/20',3,3.5),
 			 ('RIT/400/21	',2.5,1.9);
 SELECT*FROM Transcript;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
+ 

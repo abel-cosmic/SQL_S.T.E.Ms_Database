@@ -1,5 +1,5 @@
-CREATE DATABASE STEM--TO CREATE THE DATABASE 
-USE STEMs--TO INFORCE THE SYSTEM  TO  USE THIS QUERY
+CREATE DATABASE STEM1--TO CREATE THE DATABASE 
+use STEM1--TO INFORCE THE SYSTEM  TO  USE THIS QUERY
 /*BACKUP DATABASE STEM
 TO DISK = 'C:\Users\hp\Desktop\STEM.bak';*/--it isn't working to backup my database on my pc
 CREATE TABLE Department(--DEPARTMENT TABLE COLUMS/ATTRIBUTES
@@ -16,7 +16,6 @@ VALUES('CS','Computer Science',4),
 		  ('CCC','Cross Cutting Courses',NULL),
 		  ('MGT','Managment',4);
 SELECT * FROM Department;--TO VIEW WHAT WE HAVE ENTERED INTO THIS SPECIFIC TABLE
-
 CREATE TABLE Teacher (--TEACHER COLUM/ATTRIBUTES 
 	TID VARCHAR(5) PRIMARY KEY,
 	DID VARCHAR(5) NOT NULL FOREIGN KEY REFERENCES Department(DID),
@@ -49,7 +48,7 @@ INSERT INTO Course(CID,DID,Course_Name,Credit_Hour,Contact_Hour)
 VALUES ('CS02','IT','DSA',3,4),
 		      ('HH101','CCC','History	',5,4),
 		      ('CRP103','CS','Cryptography',3,3),
-		      ('M51	','CS','Mobile Computing',4,5),
+		      ('M51','CS','Mobile Computing',4,5),
 		      ('M077','CCC','Mobility',5,2);
 SELECT*FROM Course;--TO VIEW WHAT WE HAVE ENTERED INTO THIS SPECIFIC TABLE
 
@@ -89,13 +88,19 @@ CREATE TABLE Student(--STUDENT COLUMN/ATTRIBUTES
 	email NVARCHAR(50) UNIQUE NOT NULL,
 	Passwords NVARCHAR(50) NOT NULL
 );
+ SELECT SUM(Credit_Hour)
+FROM COURSE
+AS Total_Credits
+SELECT*FROM[dbo].[Transcript]
+SELECT*FROM Student--this is just a try i guess
+UPDATE Student SET SELECT SUM( Credit_Hour) AS Total_Credits  FROM  Student
 --TO INSERT TUPLES INTO THE TABLE
 INSERT INTO Student(SID_,DID,FirstName,LastName,Sex,PhoneNumber,Email,Passwords)
 VALUES('RCS/322/21','CS','Berne','Adamovicz','M','+964 464 320 2513',	'badamovicz0@netvibes.com','HjVfcJVE'),
 			 ('RARC/454/21','ARC','Maddi','Klimov','F','+48 574 220 1769	','mklimov1@loc.gov','LdYNvR'),
 			 ('RMT/326/20','MGT','Lorettalorna','Penrose','F','+212 985 381 8648','lpenrose5@ycombinator.com','xxZcE4kmOx'),
 			 ('RCS/227/20','CS','Broddy','Alfonso','M',	'+7 655 365 0517	','balfonso6@homestead.com',	'YuBWYll'),
-			 ('RIT/400/21	','IT','Dannie','Fidler','F','+62 986 745 1417','dfidler7@plala.or.','jp	2yxbA63OISm');
+			 ('RIT/400/21','IT','Dannie','Fidler','F','+62 986 745 1417','dfidler7@plala.or.','jp	2yxbA63OISm');
 SELECT*FROM Student;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Graduate_Student(--GRADUATE STUDENT COLUMN/ATTRIBUTE
@@ -109,29 +114,14 @@ SELECT*FROM Graduate_Student;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC
 
 CREATE TABLE Course_taken(--COURSE TAKEN COLUMN/ATTRIBUTE
 	SID_ VARCHAR(15)NOT NULL FOREIGN KEY REFERENCES Student(SID_),
-	DID VARCHAR(5) NOT NULL FOREIGN KEY REFERENCES Department(DID),
-	TID VARCHAR(5) NOT NULL FOREIGN KEY REFERENCES Teacher(TID),
+	TID VARCHAR(5) NOT NULL FOREIGN KEY REFERENCES  Teacher(TID),
+	CID VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES Course(CID),
 	Years INT,
 	Semester VARCHAR(3) NOT NULL,
 	Mark	INT  NULL,
-	Grade_Letter VARCHAR(4) NOT NULL,
+	Grade_Letter VARCHAR(4) NULL,
 );
-
-INSERT INTO Course_taken(SID_,DID ,TID,Years ,Semester,Mark,Grade_Letter)--TO INSERT TUPLES INTO THE TABLE
-VALUES('RIT/400/21','232','CS02',2013,	1,32,NULL),
-			 ('RCS/322/21','922','HH101',2014,2,56,NULL),
-			 ('RCS/227/20','453','HH101',2014,2,78,NULL),
-			 ('RIT/400/21','922','HH101',2015,1,98,NULL),
-			 ('RCS/322/21','453','M077',	2013,1,56,NULL),
-			 ('RARC/454/21','453','M077',2013,2,78,NULL),
-			 ('RMT/326/20','922','M077',2014,2,76,NULL),
-			 ('RCS/227/20','691','CRP103',2013,1,65,NULL),
-			 ('RCS/227/20','691','M51',2014,1,	87,NULL),
-			 ('RCS/322/21','691','M51',2015,1,56,NULL);
-SELECT*FROM Course_taken;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
-ALTER TABLE COURSE_TAKEN 
-			ADD  GRADE_LETTER VARCHAR(4) NULL
-			UPDATE COURSE_TAKEN SET Grade_Letter = 
+ UPDATE COURSE_TAKEN SET Grade_Letter = 
 			(CASE
 				 WHEN MARK >= 90 THEN 'A+'
 				 WHEN MARK >= 83 THEN 'A'
@@ -146,26 +136,32 @@ ALTER TABLE COURSE_TAKEN
 				 ELSE 'F'
 				 END
 				 );
+INSERT INTO Course_taken(SID_,TID ,CID,Years ,Semester,Mark,Grade_Letter)--TO INSERT TUPLES INTO THE TABLE
+VALUES('RIT/400/21','232','CS02',2013,	1,32,NULL),
+			 ('RCS/322/21','922','HH101',2014,2,56,NULL),
+			 ('RCS/227/20','453','HH101',2014,2,78,NULL),
+			 ('RIT/400/21','922','HH101',2015,1,98,NULL),
+			 ('RCS/322/21','453','M077',	2013,1,56,NULL),
+			 ('RARC/454/21','453','M077',2013,2,78,NULL),
+			 ('RMT/326/20','922','M077',2014,2,76,NULL),
+			 ('RCS/227/20','691','CRP103',2013,1,65,NULL),
+			 ('RCS/227/20','691','M51',2014,1,	87,NULL),
+			 ('RCS/322/21','691','M51',2015,1,56,NULL);
+SELECT*FROM Course_taken;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Message_s(--MESSAGE_S COLUMN / ATTRIBUTE 
-	TID VARCHAR(5)  NOT NULL FOREIGN KEY REFERENCES TEACHER(TID),
-	SID_ VARCHAR(15)  NOT NULL FOREIGN KEY REFERENCES STUDENT(SID_),
-	SENDERTYPE VARCHAR(1) NULL,
+	TID VARCHAR(5) NOT NULL FOREIGN KEY REFERENCES Teacher(TID),
+	SID_ VARCHAR(15)NOT NULL FOREIGN KEY REFERENCES Student(SID_),
+	SenderType CHAR,
 	Datas NVARCHAR(100) NULL,
 	TimeStamps TIMESTAMP NOT NULL
 );
-INSERT INTO Message_s(Sender ,Reciever,Datas, TimeStamps)--TO INSERT TUPLES INTO THE TABLE
-VALUES( '232','RCS/322/21','.txt','2:30'),
-			 ('691','RARC/454/21','.jpg',DEFAULT),
-			 ('922','RMT/326/20','.csv',DEFAULT),
-			 ('589','RCS/227/20','.mp4',DEFAULT),
-			 ('346','RIT/400/21','.mp3',DEFAULT),
-			 ('RCS/322/21','232','.txt',DEFAULT),
-             ('RARC/454/21','691','.jpg',DEFAULT),
-			 ('RMT/326/20','922','.csv',DEFAULT),
-			 ('RCS/227/20','589','.mp4',DEFAULT),
-			 ('RIT/400/21','346','.mp3',DEFAULT);
-			 -- CHANGED THE TIMESTAMP TO DEFAULTS BECAUSE IT EITHER HAS TO BE BLANK OR LET THE DATABASE DECIDE WHEN IT IS INSERTED INTO IT
+INSERT INTO Message_s(TID,SID_,SenderType,Datas, TimeStamps)--TO INSERT TUPLES INTO THE TABLE
+VALUES( '232','RCS/322/21','S','.txt',DEFAULT),
+			 ('691','RARC/454/21','T','.jpg',DEFAULT),
+			 ('922','RMT/326/20','S','.csv',DEFAULT),
+			 ('589','RCS/227/20','S','.mp4',DEFAULT),
+			 ('346','RIT/400/21','T','.mp3',DEFAULT);
 SELECT*FROM Message_s;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Transfer_Student(--TRANSFER STUDENT COLUMN / ATTRIBUTES
@@ -186,16 +182,16 @@ CREATE TABLE Attendance(--ATTENDANCE COLUMN / ATTRIBUTE
 	Present BIT NOT NULL
 );
 INSERT INTO  Attendance(SID_,TID,CID,Dates,Present)--TO INSERT TUPLES INTO THE TABLE
-VALUES('RIT/400/21	','232','CS02','12/28/2021',1),
+VALUES('RIT/400/21','232','CS02','12/28/2021',1),
 			 ('RCS/322/21','922','HH101','10/2/2022',0),
 			 ('RCS/227/20','453','HH101','11/13/2022',1),
-			 ('RIT/400/21	','922','HH101','8/11/2022',0),
+			 ('RIT/400/21','922','HH101','8/11/2022',0),
 			 ('RCS/322/21','453','M077',	'9/25/2022',0),
 			 ('RARC/454/21','453','M077','4/27/2022',0),
 			 ('RMT/326/20','922','M077','11/23/2022',0),
 			 ('RCS/227/20','691','CRP103','4/30/2022',1),
-			 ('RCS/227/20','691','M51	','5/20/2022',0),
-			 ('RCS/322/21','691','M51	','1/13/2022',0);
+			 ('RCS/227/20','691','M51','5/20/2022',0),
+			 ('RCS/322/21','691','M51','1/13/2022',0);
 SELECT*FROM Attendance;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Retaken(--RETAKEN COLUMN / ATTRIBUTE 
@@ -206,25 +202,57 @@ CREATE TABLE Retaken(--RETAKEN COLUMN / ATTRIBUTE
 );
 INSERT INTO Retaken(SID_	,TID,CID,	Previous_Grade)--TO INSERT TUPLES INTO THE TABLE
 VALUES('RCS/322/21','453','M077','D'),
-			 ('RIT/400/21	','232','CS02','D'),
-			 ('RCS/227/20','691','M51	','F');
+			 ('RIT/400/21','232','CS02','D'),
+			 ('RCS/227/20','691','M51','F');
 SELECT*FROM Retaken;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
 
 CREATE TABLE Transcript(--TRANSCRIPT COLUMN / ATTRIBUTES
 	SID_ VARCHAR(15)NOT NULL FOREIGN KEY REFERENCES Student(SID_),
-	GPA FLOAT NOT NULL,
-	CGPA FLOAT NOT NULL
+	GPA FLOAT ,
+	CGPA FLOAT 
 );
---TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---BEFORE INSERTING MAKE THE GPA BE CALCULATE FROM GRADES IN COURSE TAKEN TABLE
---AND THEN CGPA IS CALUCLATED BY TAKING SUM OF EACH GPA OF EACH GRADE IN COURSE TAKEN TABLE
--- AND THEN MULTIPLYING IT WITH CREDIT HOUR FROM COURSE TABLE DIVIDED BY  DEPARTMENT IN  YEARS
---TO DO-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 INSERT INTO Transcript(SID_,GPA,CGPA)--TO INSERT TUPLES INTO THE TABLE
-VALUES('RCS/322/21',2.6,2.9),
-		     ('RARC/454/21',3.2,3.3),
-			 ('RMT/326/20',2.9,2.2),
-			 ('RCS/227/20',3,3.5),
-			 ('RIT/400/21	',2.5,1.9);
+VALUES('RCS/322/21',0.00,0.00),
+		     ('RARC/454/21',0.00,0.00),
+			 ('RMT/326/20',0.00,0.00),
+			 ('RCS/227/20',0.00,0.00),
+			 ('RIT/400/21',0.00,0.00);
 SELECT*FROM Transcript;--TO VIEW THE DATA WE HAVE ENTERED IN THIS SPECIFIC TABLE
- 
+
+ALTER TABLE COURSE_TAKEN
+ADD GRADE_VALUE FLOAT
+
+UPDATE Course_taken SET GRADE_VALUE = 
+						(CASE
+							WHEN Grade_Letter = 'A+' THEN 4.00
+						    WHEN Grade_Letter = 'A' THEN 4.00
+							WHEN Grade_Letter =  'A-' THEN 3.75
+							WHEN Grade_Letter = 'B+' THEN 3.50
+							WHEN Grade_Letter = 'B' THEN 3.00
+							WHEN Grade_Letter = 'B-' THEN 2.75
+							WHEN Grade_Letter=  'C+' THEN 2.50
+							WHEN Grade_Letter=  'C' THEN 2.00
+							WHEN Grade_Letter=  'C-' THEN 1.50
+							WHEN Grade_Letter=  'D' THEN 1.00
+							ELSE 0.00
+							END
+							);
+
+
+SELECT * FROM Transcript;
+SELECT * FROM Course_taken;
+SELECT * FROM Course;
+
+
+UPDATE Transcript
+SET GPA = (SELECT (SUM(t.GRADE_VALUE * c.Credit_Hour) / SUM(C.Credit_Hour))
+FROM Student s
+INNER JOIN Course_taken t ON s.SID_ = t.SID_ 
+INNER JOIN Course c ON t.CID = c.CID
+WHERE Transcript.SID_ = s.SID_)
+
+UPDATE Transcript
+SET CGPA = (SELECT AVG(GPA)
+FROM Transcript AS t
+WHERE Transcript.SID_ = t.SID_)

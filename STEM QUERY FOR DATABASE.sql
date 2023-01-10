@@ -259,3 +259,4 @@ UPDATE Transcript
 SET CGPA = (SELECT AVG(GPA)
 FROM Transcript AS t
 WHERE Transcript.SID_ = t.SID_)
+--Look abel I am a can edit your repo
